@@ -1,0 +1,35 @@
+{
+  "name": "mint-app2",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "export": "next export",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "classnames": "^2.3.1",
+    "ethers": "^5.5.2",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-svgo": "^10.0.1",
+    "next": "12.0.7",
+    "next-compose-plugins": "^2.2.1",
+    "next-optimized-images": "^2.6.2",
+    "normalize.css": "^8.0.1",
+    "optipng": "^3.0.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "responsive-loader": "2.0.0",
+    "sass": "^1.45.1",
+    "sharp": "^0.29.3",
+    "svg-sprite-loader": "^6.0.11",
+    "use-wallet": "^0.13.4",
+    "webp-loader": "^0.6.0"
+  },
+  "devDependencies": {
+    "eslint": "8.5.0",
+    "eslint-config-next": "12.0.7"
+  }
+}
