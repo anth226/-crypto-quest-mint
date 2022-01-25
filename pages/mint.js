@@ -1,7 +1,53 @@
 import Head from 'next/head'
-// import styles from '../styles/Home.module.css'
+import { useState } from 'react';
+import contract_abi from '../abi';
+import Web3 from 'web3';
+
 
 export default function Home() {
+  const [loginState, setLoginState] = useState();
+  // const [web3, setWeb3] = useState(null);
+  const [address, setAddress] = useState();
+  const [contract, setContract] = useState();
+  const [numberOfNFT, setNumberOfNFT] = useState(1);
+
+  let contractAddress = "0xFf3D292a36E7285557F8cF8f344152f99DF14471";
+  let abi = contract_abi;
+
+  const login = async () => {
+    window.ethereum ?
+      window.ethereum.request({ method: "eth_requestAccounts" }).then((accounts) => {
+        let wallet_address = accounts[0];
+        setAddress(wallet_address)
+        
+    //     let w3 = new Web3(ethereum)
+    //     setWeb3(w3)
+
+    //     let c = new w3.eth.Contract(abi, contractAddress)
+    //     setContract(c)
+
+    //     console.log(contract)
+      const web3 = new Web3(window.ethereum);
+      let c = new web3.eth.Contract(abi, contractAddress);  
+      setContract(c);
+    
+      }).catch((err) => console.log(err))
+    : setLoginState("No metamask wallet... Please install it.");
+  }
+  
+  const mintNFT = async () => {
+    console.log("numberOfNFT", numberOfNFT);
+    return contract.methods.mint(numberOfNFT).send({ from: address });
+  }
+
+  const increaseNumber = () => {
+    setNumberOfNFT(++numberOfNFT);
+  }
+
+  const decreaseNumber = () => {
+    setNumberOfNFT(--numberOfNFT);
+  }
+  
   return (
     <div>
       <Head>
@@ -22,7 +68,8 @@ export default function Home() {
         <div className="mint__header mb-6 m:mb-5 p-4 s:px-5 bg-white rounded-l box-shadow-l">
           <p className="mint__balance my-0 fw-bold">50.23 Left</p>
           <div className="w-100 s:w-auto s:ml-auto s:pl-4">
-            <a href="#" className="mint__connect-wallet btn btn--primary w-100">Connect Wallet</a>
+            <p className='text-center'>{loginState}</p>
+            <a href="#" className="mint__connect-wallet btn btn--primary w-100" onClick={login}>Connect Wallet</a>
           </div>
         </div>
         <div className="mint__body mb-5 rounded-l box-shadow-l">
@@ -51,10 +98,10 @@ export default function Home() {
               <div className="quantity-control d-flex flex-column">
                 <label for="qty" className="quantity-control__label fs-m m:fs-l fw-bold">Quantity</label>
                 <span className="quantity-control__input-container">
-                  <input type="text" defaultValue={1} min="1" id="qty" inputmode="numeric" className="quantity-control__input display-3" />
+                  <input type="text" value={numberOfNFT} min="1" id="qty" inputmode="numeric" className="quantity-control__input display-3" />
                   <span className="quantity-control__actions">
-                    <button type="button" className="no-btn" data-action="add"><svg className="icon fs-xs m:fs-s" width="16" height="16" role="img" aria-label="+1"><use xlinkHref="/img/icons.svg#caret-up"></use></svg></button>
-                    <button type="button" className="no-btn" data-action="remove"><svg className="icon fs-xs m:fs-s" width="16" height="16" role="img" aria-label="-1"><use xlinkHref="/img/icons.svg#caret-down"></use></svg></button>
+                    <button type="button" className="no-btn" onClick={increaseNumber} data-action="add"><svg className="icon fs-xs m:fs-s" width="16" height="16" role="img" aria-label="+1"><use xlinkHref="/img/icons.svg#caret-up"></use></svg></button>
+                    <button type="button" className="no-btn" onClick={decreaseNumber} data-action="remove"><svg className="icon fs-xs m:fs-s" width="16" height="16" role="img" aria-label="-1"><use xlinkHref="/img/icons.svg#caret-down"></use></svg></button>
                   </span>
                 </span>
               </div>
@@ -69,7 +116,7 @@ export default function Home() {
           </div>
         </div>
         <div>
-          <a href="#" className="btn btn--primary w-100">Mint Now</a>
+          <a href="#" className="btn btn--primary w-100" onClick={mintNFT}>Mint Now</a>
         </div>
       </div>
       
